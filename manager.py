@@ -13,5 +13,13 @@ class InstrumentManager:
         if name not in self.instruments:
             self.instruments[name] = Instrument(name, port, instrument_id)
         return self.instruments[name]
+
+
     def get_instruments(self):
         return self.instruments.values()
+
+    def remove_instrument(self, instrument):
+        for name, inst in list(self.instruments.items()):
+            if inst == instrument:
+                del self.instruments[name]
+                break

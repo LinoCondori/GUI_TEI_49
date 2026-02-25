@@ -64,7 +64,13 @@ class App:
             self.entry_name.delete(0, tk.END)
             self.entry_port.delete(0, tk.END)
             self.entry_instrument_id.delete(0, tk.END)
-
+            btn_delete = tk.Button(
+                frame,
+                text="X",
+                fg="red",
+                command=lambda inst=instrument: self.remove_instrument(inst)
+            )
+            btn_delete.pack(anchor="ne",side="right")
             label_name = tk.Label(frame, text=name)
             label_name.pack()
             label_port = tk.Label(frame, text=port)
@@ -87,6 +93,7 @@ class App:
                 "label_value": label_value,
                 "enable":var_enabled,
             }
+
             instrument.start()
             #label = tk.Label(self.instruments_frame, text=f"{name}: --")
             #label.pack(side="left")
@@ -109,6 +116,17 @@ class App:
             instrument.start()
         else:
             instrument.stop()
+
+    def remove_instrument(self, instrument):
+
+        instrument.stop()
+
+        self.manager.remove_instrument(instrument)
+
+        if instrument in self.inst_frame:
+            self.inst_frame[instrument]["frame"].destroy()
+
+            del self.inst_frame[instrument]
 
 if __name__ == "__main__":
     root = tk.Tk()
