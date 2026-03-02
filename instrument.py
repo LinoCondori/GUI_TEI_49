@@ -5,12 +5,22 @@ import time
 import os
 import pandas as pd
 from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
+
+import serial
+
+def minute_mode(x):
+    m = x.mode()
+    if len(m) == 0:
+        return None
+    return m.iloc[0]
+
+
 
 
 class Instrument:
-    def __init__(self, name, port, instrument_id):
+    def __init__(self, name, port=None, instrument_id=None, communication=None):
         self.name = name
+        self.communication = communication
         self.port = port
         self.instrument_id = instrument_id
         self.value = None
@@ -27,18 +37,23 @@ class Instrument:
         self.running = False
 
     def _loop(self):
+        self.communication.connect()
         while self.running:
-            self.value = self.read_value()
-            time.sleep(2)
+            data = self.communication.read()
+            self.value, data2, string = data # self.read_value()
+            self.save_data(self.value, data2, string)
+        self.communication.close()
+
 
     def read_value(self):
-        # Simulación de lectura
+        # Ya no se usa
         data1= round(random.uniform(0, 100), 2)
-        self.save_data(data1, round(random.uniform(0, 100), 2))
+        dataString = ["adfsadf", "adfyuoi", "yeryuoi", "mbnvvbn"]
+        self.save_data(data1, round(random.uniform(0, 100), 2), dataString[random.randint(0, 3)])
         return data1
 
 
-    def save_data(self, data1, data2):
+    def save_data(self, data1, data2, dataString):
         now = datetime.now()
 
         year = now.strftime("%Y")
@@ -49,14 +64,30 @@ class Instrument:
         os.makedirs(base_path, exist_ok=True)
 
         file_path = os.path.join(base_path, f"{date_str}.csv")
-
         file_exists = os.path.isfile(file_path)
 
-        with open(file_path, "a") as f:
-            if not file_exists:
-                f.write("FechaHora,dato1,dato2\n")
+        if self.communication.port.startswith("COM"):
+            with open(file_path, "a") as f:
+                if not file_exists:
+                    f.write("FechaHora,dato1,dato2,dataString\n")
 
-            f.write(f"{timestamp},{data1},{data2}\n")
+                f.write(f"{timestamp},{data1},{data2},{dataString}\n")
+
+        elif "." in self.communication.port:  # IP
+            with open(file_path, "a") as f:
+                if not file_exists:
+                    f.write("FechaHora,dato1,dato2,dataString\n")
+
+                f.write(f"{timestamp},{data1},{data2},{dataString}\n")
+        else:
+            with open(file_path, "a") as f:
+                if not file_exists:
+                    f.write("FechaHora,dato1,dato2,dataString\n")
+
+                f.write(f"{timestamp},{data1},{data2},{dataString}\n")
+
+
+
 
     def load_data_from_file(self, file):
 
@@ -65,3 +96,20 @@ class Instrument:
         except:
             df = pd.DataFrame()
         return df
+
+    def minute_average(self, file):
+
+        df = self.load_data_from_file(file)
+        df.set_index(df["FechaHora"], inplace=True)
+        #df["FechaHora"] = df.index
+        df_num = df.select_dtypes(include='number')
+        df_Tmin = df_num.resample('min', label='left').mean()
+        df_No_num = df.select_dtypes(exclude='number')
+        df_NO_min = df_No_num.resample('min').agg(minute_mode)
+
+        return pd.concat([df_Tmin.round(3),df_NO_min], axis=1)
+
+
+
+
+
