@@ -13,7 +13,10 @@ class TCPCommunication(BaseCommunication):
         self.sock.connect((self.host, self.port))
 
     def read(self):
+        comando = 'o3'
+        self.sock.send(comando.encode('utf-8'))
         data = self.sock.recv(1024)
+        print(data)
         return data.decode().strip()
 
     def close(self):
