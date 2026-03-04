@@ -100,6 +100,8 @@ class Instrument:
     def minute_average(self, file):
 
         df = self.load_data_from_file(file)
+        if df.empty:
+            return pd.DataFrame(columns=["FechaHora", "dato1"])
         df.set_index(df["FechaHora"], inplace=True)
         #df["FechaHora"] = df.index
         df_num = df.select_dtypes(include='number')

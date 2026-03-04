@@ -249,20 +249,18 @@ class App:
             file_path_now = self.create_path_raw(now, instrument.name)
             file_path_yesterday = self.create_path_raw(yesterday, instrument.name)
             df_full = pd.concat([instrument.load_data_from_file(file_path_now) , instrument.load_data_from_file(file_path_yesterday)], axis=0)
+            try:
+                filter_1H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(1, "hour")
+                df = df_full.loc[filter_1H]
+                if df is not None and not df.empty:
+                    self.ax_hour.plot(df["FechaHora"], df["dato1"], label=instrument.name)
 
-            filter_1H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(1, "hour")
-
-
-            df = df_full.loc[filter_1H]
-
-            if df is not None and not df.empty:
-                self.ax_hour.plot(df["FechaHora"], df["dato1"], label=instrument.name)
-
-            filter_24H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(24, "hour")
-            df = df_full.loc[filter_24H]
-            if df is not None and not df.empty:
-                self.ax_24h.plot(df["FechaHora"], df["dato1"], label=instrument.name)
-
+                filter_24H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(24, "hour")
+                df = df_full.loc[filter_24H]
+                if df is not None and not df.empty:
+                    self.ax_24h.plot(df["FechaHora"], df["dato1"], label=instrument.name)
+            except:
+                pass
         self.ax_hour.legend()
         self.ax_hour.set_title("Última hora")
         self.ax_hour.tick_params(axis='x', rotation=45)
@@ -285,6 +283,8 @@ class App:
             file_path_avg = self.create_path_avg(now, instrument.name)
             base_path = os.path.join(os.path.dirname(file_path_avg))
             os.makedirs(base_path, exist_ok=True)
+            if df_avg.empty:
+                return
             df_avg.to_csv(file_path_avg)
         self.root.after(60000, self.update_minute_file)  # cada 10 segundos
 
