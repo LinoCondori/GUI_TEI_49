@@ -17,7 +17,7 @@ class TCPCommunication(BaseCommunication):
         self.sock.send(comando.encode('utf-8'))
         data = self.sock.recv(1024)
         print(data)
-        return data.decode().strip()
+        return data.decode().strip(), data.decode().strip(), comando
 
     def close(self):
         if self.sock:
