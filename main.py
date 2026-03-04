@@ -143,7 +143,7 @@ class App:
                 #else:
                 #    self.inst_frame[instrument.name]["label_value"].config(text=f'------')
                 self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value}')
-        self.root.after(200, self.update_loop)  # actualiza cada 2 segundos
+        self.root.after(200, self.update_loop)  # actualiza cada 2 segundos los instrumentos
 
     def toggle_instrument(self, instrument, var):
         if var.get():

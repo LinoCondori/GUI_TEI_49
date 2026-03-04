@@ -39,9 +39,13 @@ class Instrument:
     def _loop(self):
         self.communication.connect()
         while self.running:
+            if not self.communication.connect():
+                print("Reintentando en 5 segundos...")
+                time.sleep(5)
+                continue
             data = self.communication.read()
-            self.value, data2, string = data # self.read_value()
-            self.save_data(self.value, data2, string)
+            self.value= data # self.read_value()
+            self.save_data(self.value)
         self.communication.close()
 
 
@@ -53,7 +57,7 @@ class Instrument:
         return data1
 
 
-    def save_data(self, data1, data2, dataString):
+    def save_data(self, data1, data2="", dataString=" "):
         now = datetime.now()
 
         year = now.strftime("%Y")
@@ -84,7 +88,7 @@ class Instrument:
                 if not file_exists:
                     f.write("FechaHora,dato1,dato2,dataString\n")
 
-                f.write(f"{timestamp},{data1},{data2},{dataString}\n")
+                f.write(f"{timestamp},{data1}\n")
 
 
 
