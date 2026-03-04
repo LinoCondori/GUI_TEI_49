@@ -39,10 +39,6 @@ class Instrument:
     def _loop(self):
         self.communication.connect()
         while self.running:
-            if not self.communication.connect():
-                print("Reintentando en 5 segundos...")
-                time.sleep(5)
-                continue
             data = self.communication.read()
             self.value= data # self.read_value()
             self.save_data(self.value)

@@ -11,6 +11,7 @@ class SimulatedCommunication(BaseCommunication):
 
     def connect(self):
         self.running = True
+        return True
 
     def read(self):
         time.sleep(1)
