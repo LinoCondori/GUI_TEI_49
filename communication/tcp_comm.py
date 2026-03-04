@@ -17,19 +17,19 @@ class TCPCommunication(BaseCommunication):
     def read(self):
         #comando = 'o3'
         #self.sock.send(comando.encode('utf-8'))
-        time.sleep(5)
-        data = self.sock.recv(2048)
+
+        data = self.sock.recv(2048).decode()
         print(data)
         print(type(data))
-        time.sleep(5)
+
         while data == header:
-            data = self.sock.recv(2048)
+            data = self.sock.recv(2048).decode()
             print(data)
             print(type(data))
 
 
         print(data)
-        return data.decode()#.strip()
+        return data#.strip()
 
     def close(self):
         if self.sock:
