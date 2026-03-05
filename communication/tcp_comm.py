@@ -9,7 +9,7 @@ class TCPCommunication(BaseCommunication):
 
     def __init__(self, host, port):
         self.host = host
-        self.port = int(port)
+        self.port = port
         self.sock = None
         self.connected = False
 
@@ -17,7 +17,7 @@ class TCPCommunication(BaseCommunication):
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.sock.settimeout(10)
-            self.sock.connect((self.host, self.port))
+            self.sock.connect((self.host, int(self.port)))
             self.connected = True
             print("Conectado")
             return True
