@@ -148,7 +148,8 @@ class App:
 
                     elif "." in instrument.communication.port:  # IP
                         print("Mostrando Datos TCP")
-                        self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')
+                        self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[
+                            instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')
                     else:
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
         self.root.after(200, self.update_loop)  # actualiza cada 2 segundos los instrumentos
@@ -268,7 +269,8 @@ class App:
                 if df is not None and not df.empty:
                     self.ax_24h.plot(df["FechaHora"], df["dato1"], label=instrument.name)
             except:
-                pass
+                self.root.after(10000, self.update_graph)  # cada 10 segundos
+                return
         self.ax_hour.legend()
         self.ax_hour.set_title("Última hora")
         self.ax_hour.tick_params(axis='x', rotation=45)

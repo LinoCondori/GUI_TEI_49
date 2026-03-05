@@ -49,8 +49,9 @@ class Instrument:
 
 
             if data:
-                if self.communication.header == data:  # self.read_value()
-                    return
+                if self.communication.header == data:
+                    print("se detecto encabezado")# self.read_value()
+                    continue
                 self.value = data
                 self.save_data(self.value)
             else:
