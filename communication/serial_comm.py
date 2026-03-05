@@ -45,6 +45,7 @@ class SerialCommunication(BaseCommunication):
         self.conn = serial.Serial(self.port, self.baudrate)
 
     def read(self):
+
         return self.conn.readline().decode().strip()
 
     def close(self):

@@ -14,7 +14,7 @@ def minute_mode(x):
         return None
     return m.iloc[0]
 
-
+header_ps = "time date Concentration_(ppb_or_ug/m3)"
 
 
 class Instrument:
@@ -49,6 +49,10 @@ class Instrument:
 
 
             if data:
+                if self.instrument_id == "PS":
+                    if self.communication.header == data:
+                        print("se detecto encabezado")  # self.read_value()
+                        continue
                 if self.communication.header == data:
                     print("se detecto encabezado")# self.read_value()
                     continue
@@ -88,6 +92,13 @@ class Instrument:
                 f.write(f"{timestamp},{data1}\n")
 
         elif hasattr(self.communication, 'host'): #"." in self.communication.host:  # IP if hasattr(self.communication, 'host'):
+            if self.instrument_id == "PS":
+
+                with open(file_path, "a") as f:
+                    if not file_exists:
+                        f.write(f"FechaHora,{header_ps.replace(" ", ",")}")
+                    f.write(f"{timestamp},{data1.replace("\r", "").replace(" ", ",")}")
+
             with open(file_path, "a") as f:
                 if not file_exists:
                     f.write(f"FechaHora,{self.communication.header.replace(" ", ",")}")
