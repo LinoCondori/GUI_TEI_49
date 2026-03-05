@@ -147,7 +147,8 @@ class App:
                         pass
 
                     elif hasattr(instrument.communication, 'host'): #"." in instrument.communication.host:
-                        #print("Mostrando Datos TCP")
+                        if instrument.instrument_id == "PS":
+                            self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[-1]}')
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[
                             instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')
                     else:
