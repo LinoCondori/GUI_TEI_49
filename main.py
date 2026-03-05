@@ -142,7 +142,14 @@ class App:
                 #    self.inst_frame[instrument.name]["label_value"].config(text=f'{value}')
                 #else:
                 #    self.inst_frame[instrument.name]["label_value"].config(text=f'------')
-                self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value}')
+                if instrument.value  is not None:
+                    if instrument.communication.port.startswith("COM"):
+                        pass
+
+                    elif "." in instrument.communication.port:  # IP
+                        self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
+                    else:
+                        self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
         self.root.after(200, self.update_loop)  # actualiza cada 2 segundos los instrumentos
 
     def toggle_instrument(self, instrument, var):

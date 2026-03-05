@@ -16,9 +16,12 @@ class SimulatedCommunication(BaseCommunication):
     def read(self):
         time.sleep(1)
         data1 = round(random.uniform(0, 100), 2)
+        data2 = round(random.uniform(0, 100), 2)
         dataString = ["adfsadf", "adfyuoi", "yeryuoi", "mbnvvbn"]
+        dataString = dataString[random.randint(0, 3)]
+        return f"{data1},{data2},{dataString}"
 
-        return data1, round(random.uniform(0, 100), 2), dataString[random.randint(0, 3)]
+
 
     def close(self):
         self.running = False

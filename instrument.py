@@ -37,25 +37,34 @@ class Instrument:
         self.running = False
 
     def _loop(self):
-        self.communication.connect()
+
         while self.running:
+
+            if not self.communication.connected:
+                if not self.communication.connect():
+                    time.sleep(5)
+                    continue
+
             data = self.communication.read()
-            self.value= data # self.read_value()
+            self.value = data  # self.read_value()
             self.save_data(self.value)
-        self.communication.close()
+
+            if data:
+                self.process_frame(data)
+            else:
+                print("Reconectando...")
+                self.communication.close()
+                time.sleep(5)
 
 
     def read_value(self):
         # Ya no se usa
-        data1= round(random.uniform(0, 100), 2)
-        dataString = ["adfsadf", "adfyuoi", "yeryuoi", "mbnvvbn"]
-        self.save_data(data1, round(random.uniform(0, 100), 2), dataString[random.randint(0, 3)])
-        return data1
+        pass
 
 
     def save_data(self, data1, data2="", dataString=" "):
+        #Generar PATH
         now = datetime.now()
-
         year = now.strftime("%Y")
         date_str = now.strftime("%Y-%m-%d")
         timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
@@ -65,20 +74,22 @@ class Instrument:
 
         file_path = os.path.join(base_path, f"{date_str}.csv")
         file_exists = os.path.isfile(file_path)
+        print(self.communication.port)
+        ### GUARDAR
 
         if self.communication.port.startswith("COM"):
             with open(file_path, "a") as f:
                 if not file_exists:
-                    f.write("FechaHora,dato1,dato2,dataString\n")
+                    f.write("FechaHora, trama de datos \n")
 
-                f.write(f"{timestamp},{data1},{data2},{dataString}\n")
+                f.write(f"{timestamp},{data1}\n")
 
         elif "." in self.communication.port:  # IP
             with open(file_path, "a") as f:
                 if not file_exists:
                     f.write("FechaHora,dato1,dato2,dataString\n")
 
-                f.write(f"{timestamp},{data1},{data2},{dataString}\n")
+                f.write(f"{timestamp},{data1}\n")
         else:
             with open(file_path, "a") as f:
                 if not file_exists:
