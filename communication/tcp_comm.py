@@ -36,7 +36,7 @@ class TCPCommunication(BaseCommunication):
                 return None
             print(data)
             if data == header:
-                return None
+                return ""
             print(type(data))
             return data
 
