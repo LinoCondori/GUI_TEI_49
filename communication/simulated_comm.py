@@ -8,9 +8,11 @@ class SimulatedCommunication(BaseCommunication):
         self.name = name
         self.port = port
         self.running = False
+        self.connected = False
 
     def connect(self):
         self.running = True
+        self.connected = True
         return True
 
     def read(self):
@@ -25,3 +27,4 @@ class SimulatedCommunication(BaseCommunication):
 
     def close(self):
         self.running = False
+        self.connected = False

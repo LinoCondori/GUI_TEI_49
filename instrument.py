@@ -46,11 +46,11 @@ class Instrument:
                     continue
 
             data = self.communication.read()
-            self.value = data  # self.read_value()
-            self.save_data(self.value)
+
 
             if data:
-                self.process_frame(data)
+                self.value = data  # self.read_value()
+                self.save_data(self.value)
             else:
                 print("Reconectando...")
                 self.communication.close()
