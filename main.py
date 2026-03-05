@@ -147,7 +147,7 @@ class App:
                         pass
 
                     elif "." in instrument.communication.port:  # IP
-                        self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
+                        self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[5]}')
                     else:
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
         self.root.after(200, self.update_loop)  # actualiza cada 2 segundos los instrumentos

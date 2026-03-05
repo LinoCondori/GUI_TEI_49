@@ -29,12 +29,14 @@ class TCPCommunication(BaseCommunication):
 
     def read(self):
         try:
-            data = self.sock.recv(4096)
+            data = self.sock.recv(4096).decode()
             if not data:
                 print("Conexión cerrada  por el servidor")
                 self.connected = False
                 return None
             print(data)
+            if data == header:
+                return None
             print(type(data))
             return data
 
