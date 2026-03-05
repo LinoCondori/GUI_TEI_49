@@ -146,7 +146,7 @@ class App:
                     if instrument.communication.port.startswith("COM"):
                         pass
 
-                    elif "." in instrument.communication.port:  # IP
+                    elif "." in instrument.communication.host:
                         print("Mostrando Datos TCP")
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[
                             instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')

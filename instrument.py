@@ -87,10 +87,10 @@ class Instrument:
 
                 f.write(f"{timestamp},{data1}\n")
 
-        elif "." in self.communication.port:  # IP
+        elif "." in self.communication.host:  # IP
             with open(file_path, "a") as f:
                 if not file_exists:
-                    f.write("FechaHora,dato1,dato2,dataString\n")
+                    f.write(f"FechaHora,{self.communication.header}")
 
                 f.write(f"{timestamp},{data1}\n")
         else:
