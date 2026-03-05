@@ -9,6 +9,7 @@ class SimulatedCommunication(BaseCommunication):
         self.port = port
         self.running = False
         self.connected = False
+        self.header = "Header"
 
     def connect(self):
         self.running = True

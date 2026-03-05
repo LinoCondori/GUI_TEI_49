@@ -49,7 +49,9 @@ class Instrument:
 
 
             if data:
-                self.value = data  # self.read_value()
+                if self.communication.header == data:  # self.read_value()
+                    return
+                self.value = data
                 self.save_data(self.value)
             else:
                 print("Reconectando...")

@@ -12,6 +12,7 @@ class TCPCommunication(BaseCommunication):
         self.port = port
         self.sock = None
         self.connected = False
+        self.header = header
 
     def connect(self):
         try:
@@ -35,9 +36,6 @@ class TCPCommunication(BaseCommunication):
                 self.connected = False
                 return None
             print(data)
-            if data == header:
-                return ""
-            print(type(data))
             return data
 
         except Exception as e:
