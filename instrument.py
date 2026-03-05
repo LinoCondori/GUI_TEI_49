@@ -92,7 +92,7 @@ class Instrument:
                 if not file_exists:
                     f.write(f"FechaHora,{self.communication.header}")
 
-                f.write(f"{timestamp},{data1}\n")
+                f.write(f"{timestamp},{data1}")
         else:
             with open(file_path, "a") as f:
                 if not file_exists:

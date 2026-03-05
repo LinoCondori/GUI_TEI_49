@@ -147,12 +147,12 @@ class App:
                         pass
 
                     elif "." in instrument.communication.host:
-                        print("Mostrando Datos TCP")
+                        #print("Mostrando Datos TCP")
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[
                             instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')
                     else:
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
-        self.root.after(200, self.update_loop)  # actualiza cada 2 segundos los instrumentos
+        self.root.after(20000, self.update_loop)  # actualiza cada 2 segundos los instrumentos
 
     def toggle_instrument(self, instrument, var):
         if var.get():
@@ -282,7 +282,7 @@ class App:
 
         self.canvas.draw()
 
-        self.root.after(10000, self.update_graph)  # cada 10 segundos
+        self.root.after(20000, self.update_graph)  # cada 10 segundos
 
 
     def update_minute_file(self):
