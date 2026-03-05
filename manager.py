@@ -16,7 +16,7 @@ class InstrumentManager:
 
         elif "." in port:  # IP
             host, tcp_port = port.split(":")
-            comm = TCPCommunication(host, tcp_port)
+            comm = TCPCommunication(host, tcp_port, instrument_id)
 
         else:
             print("Tipo de puerto desconocido")
