@@ -90,8 +90,8 @@ class Instrument:
         elif hasattr(self.communication, 'host'): #"." in self.communication.host:  # IP if hasattr(self.communication, 'host'):
             with open(file_path, "a") as f:
                 if not file_exists:
-                    f.write(f"FechaHora,{self.communication.header}")
-                f.write(f"{timestamp},{data1.replace("\r", "")}")
+                    f.write(f"FechaHora,{self.communication.header.split()}")
+                f.write(f"{timestamp},{data1.replace("\r", "").split()}")
         else:
             with open(file_path, "a") as f:
                 if not file_exists:
