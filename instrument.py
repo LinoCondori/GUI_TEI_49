@@ -77,7 +77,7 @@ class Instrument:
 
         file_path = os.path.join(base_path, f"{date_str}.csv")
         file_exists = os.path.isfile(file_path)
-        print(self.communication.port)
+        #print(self.communication.port)
         ### GUARDAR
 
         if self.communication.port.startswith("COM"):
@@ -87,12 +87,11 @@ class Instrument:
 
                 f.write(f"{timestamp},{data1}\n")
 
-        elif "." in self.communication.host:  # IP
+        elif hasattr(self.communication, 'host'): #"." in self.communication.host:  # IP if hasattr(self.communication, 'host'):
             with open(file_path, "a") as f:
                 if not file_exists:
                     f.write(f"FechaHora,{self.communication.header}")
-
-                f.write(f"{timestamp},{data1}")
+                f.write(f"{timestamp},{data1.replace("\r", "")}")
         else:
             with open(file_path, "a") as f:
                 if not file_exists:

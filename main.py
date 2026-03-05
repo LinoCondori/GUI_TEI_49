@@ -146,7 +146,7 @@ class App:
                     if instrument.communication.port.startswith("COM"):
                         pass
 
-                    elif "." in instrument.communication.host:
+                    elif hasattr(instrument.communication, 'host'): #"." in instrument.communication.host:
                         #print("Mostrando Datos TCP")
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split()[
                             instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')
@@ -258,16 +258,18 @@ class App:
             file_path_now = self.create_path_raw(now, instrument.name)
             file_path_yesterday = self.create_path_raw(yesterday, instrument.name)
             df_full = pd.concat([instrument.load_data_from_file(file_path_now) , instrument.load_data_from_file(file_path_yesterday)], axis=0)
+            df_full.rename(columns={'Concentration_(ppb_or_ug/m3)': 'O3'}, inplace=True)
+            df_full.rename(columns={'dato1': 'O3'}, inplace=True)
             try:
                 filter_1H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(1, "hour")
                 df = df_full.loc[filter_1H]
                 if df is not None and not df.empty:
-                    self.ax_hour.plot(df["FechaHora"], df["dato1"], label=instrument.name)
+                    self.ax_hour.plot(df["FechaHora"], df["O3"], label=instrument.name)
 
                 filter_24H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(24, "hour")
                 df = df_full.loc[filter_24H]
                 if df is not None and not df.empty:
-                    self.ax_24h.plot(df["FechaHora"], df["dato1"], label=instrument.name)
+                    self.ax_24h.plot(df["FechaHora"], df["O3"], label=instrument.name)
             except:
                 self.root.after(10000, self.update_graph)  # cada 10 segundos
                 return
