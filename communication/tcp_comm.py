@@ -31,7 +31,7 @@ class TCPCommunication(BaseCommunication):
         try:
             data = self.sock.recv(4096)
             if not data:
-                print("Conexión cerrada por el servidor")
+                print("Conexión cerrada  por el servidor")
                 self.connected = False
                 return None
             print(data)
