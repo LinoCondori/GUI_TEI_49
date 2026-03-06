@@ -35,20 +35,19 @@ def recibir(sock):
         except:
             break
 
+if __name__ == "__main__":
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        print(f"Conectado a {HOST}:{PORT}")
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    print(f"Conectado a {HOST}:{PORT}")
+        # Hilo para recibir datos sin bloquear input
+        threading.Thread(target=recibir, args=(s,), daemon=True).start()
 
-    # Hilo para recibir datos sin bloquear input
-    threading.Thread(target=recibir, args=(s,), daemon=True).start()
-
-    while True:
-        mensaje =  input("Enviar: ")
-        if mensaje.lower() == "exit":
-            break
-        mensaje = (STX + ST_ID + SP + mensaje + ETX)
-        bcc = calculate_bcc(mensaje)
-        print(mensaje)
-        print(bcc)
-        s.sendall( (mensaje+bcc))
+        while True:
+            entrada =  input("Enviar: ")
+            if entrada.lower() == "exit":
+                break
+            mensaje = (STX + ST_ID + SP + entrada + ETX)
+            mensaje + calculate_bcc(mensaje.encode())
+            print(mensaje)
+            s.sendall( (mensaje.encode()))
