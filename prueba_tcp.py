@@ -4,6 +4,12 @@ import threading
 HOST = "192.168.1.50"  # IP del servidor
 PORT = 9881  # Puerto
 
+STX = chr(0x02)
+SP = chr(0x20)
+ST_ID = "ST005"
+ETX = chr(0x03)
+
+
 def calculate_bcc(data_bytes):
     """
     Calculates the Block Check Character (BCC) for a sequence of bytes.
@@ -41,11 +47,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         mensaje =  input("Enviar: ")
         if mensaje.lower() == "exit":
             break
-        STX = chr(0x02)
-        SP = chr(0x20)
-        ST_ID = "ST005"
-        ETX = chr(0x03)
-        mensaje = STX + ST_ID + SP + mensaje + ETX
+        mensaje = (STX + ST_ID + SP + mensaje + ETX)
         bcc = calculate_bcc(mensaje)
-        print(mensaje+bcc)
-        s.sendall( (mensaje+bcc).encode())
+        print(mensaje)
+        print(bcc)
+        s.sendall( (mensaje+bcc))
