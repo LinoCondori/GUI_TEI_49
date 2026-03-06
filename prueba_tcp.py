@@ -6,7 +6,7 @@ PORT = 9881  # Puerto
 
 STX = chr(0x02)
 SP = chr(0x20)
-ST_ID = "ST005"
+ST_ID = "ST001"
 ETX = chr(0x03)
 
 
