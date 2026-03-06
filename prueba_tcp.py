@@ -2,7 +2,7 @@ import socket
 import threading
 
 HOST = "192.168.1.50"  # IP del servidor
-PORT = 9881  # Puerto
+PORT = 9882  # Puerto
 
 STX = chr(0x02)
 SP = chr(0x20)
