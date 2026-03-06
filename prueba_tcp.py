@@ -48,6 +48,6 @@ if __name__ == "__main__":
             if entrada.lower() == "exit":
                 break
             mensaje = (STX + ST_ID + SP + entrada + ETX)
-            mensaje + calculate_bcc(mensaje.encode())
+            mensaje = mensaje + calculate_bcc(mensaje.encode())
             print(mensaje)
             s.sendall( (mensaje.encode()))
