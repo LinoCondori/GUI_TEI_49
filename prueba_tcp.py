@@ -21,7 +21,7 @@ def calculate_bcc(data_bytes):
     bcc = 0
     for byte in data_bytes:
         bcc ^= byte
-    return chr(bcc)
+    return  chr(bcc)
 
 
 def recibir(sock):
