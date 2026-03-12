@@ -256,7 +256,7 @@ class App:
         for instrument in self.manager.get_instruments():
             file_path_now = self.create_path_raw(now, instrument.name)
             file_path_yesterday = self.create_path_raw(yesterday, instrument.name)
-            df_full = pd.concat([instrument.load_data_from_file(file_path_now) , instrument.load_data_from_file(file_path_yesterday)], axis=0)
+            df_full = pd.concat([instrument.load_data_from_file(file_path_yesterday), instrument.load_data_from_file(file_path_now) , ], axis=0)
             df_full.rename(columns={'Concentration_(ppb_or_ug/m3)': 'O3'}, inplace=True)
             df_full.rename(columns={'dato1': 'O3'}, inplace=True)
             try:
