@@ -20,7 +20,7 @@ class TCPCommunication(BaseCommunication):
     def connect(self):
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            self.sock.settimeout(15)
+            self.sock.settimeout(60)
             self.sock.connect((self.host, int(self.port)))
             self.connected = True
             print("Conectado")
