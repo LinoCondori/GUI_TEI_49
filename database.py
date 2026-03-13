@@ -14,15 +14,15 @@ Tabla_Zero = 'O3_Calibraciones'
 inicio = pd.to_datetime('2025-01-01 00:00')
 fin = pd.to_datetime('2026-01-01 00:00')
 
-import socket
+import pymysql
 
-ip = "192.168.1.50"
-port = 3306
-
-s = socket.socket()
-s.connect((ip, port))
-
-data = s.recv(1024)
-print(data)
-
-s.close()
+try:
+    conn = pymysql.connect(
+        host="192.168.1.50",
+        port=3306,
+        user="root",
+        password=""
+    )
+    print("Conectado!")
+except Exception as e:
+    print(e)
