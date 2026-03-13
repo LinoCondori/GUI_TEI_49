@@ -27,7 +27,8 @@ conn = pymysql.connect(
 
 cursor = conn.cursor()
 
-cursor.execute("SHOW DATABASES")
+cursor.execute("USE dichot")
+cursor.execute("SHOW TABLES")
 
-for db in cursor.fetchall():
-    print(db)
+for table in cursor.fetchall():
+    print(table)
