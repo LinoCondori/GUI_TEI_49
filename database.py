@@ -16,13 +16,18 @@ fin = pd.to_datetime('2026-01-01 00:00')
 
 import pymysql
 
-try:
-    conn = pymysql.connect(
-        host="192.168.1.50",
-        port=3306,
-        user="root",
-        password=""
-    )
-    print("Conectado!")
-except Exception as e:
-    print(e)
+import pymysql
+
+conn = pymysql.connect(
+    host="192.168.1.50",
+    port=3306,
+    user="root",
+    password=""
+)
+
+cursor = conn.cursor()
+
+cursor.execute("SHOW DATABASES")
+
+for db in cursor.fetchall():
+    print(db)
