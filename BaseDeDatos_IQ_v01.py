@@ -12,7 +12,7 @@ def buscarEnBaseDeDatos(engine, Tabla, inicio, fin):
         consulta = "SELECT * FROM " + Tabla + " WHERE time_stamp >= '" + inicio._repr_base + "' AND time_stamp < '" + fin._repr_base + "' ORDER BY time_stamp"
         print(consulta)
         df_aux = pd.read_sql_query(consulta, con=engine)
-        df_aux.DateTime = pd.to_datetime(df_aux.time_stamp)
+        df_aux['DateTime'] = pd.to_datetime(df_aux.time_stamp)
         df_aux.set_index(['DateTime'], inplace=True)
         df_aux['DateTime'] = df_aux.index
         df_aux.index.name = 'DateTime'
