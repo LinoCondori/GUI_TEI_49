@@ -30,8 +30,13 @@ cursor = conn.cursor()
 # seleccionar la base
 cursor.execute("USE dichot")
 
+cursor.execute("DESCRIBE LogEntry")
+
+for col in cursor.fetchall():
+    print(col)
+
 # hacer la consulta
-cursor.execute("SELECT * FROM logentry")
+cursor.execute("SELECT * FROM LogEntry LIMIT 20")
 
 rows = cursor.fetchall()
 
