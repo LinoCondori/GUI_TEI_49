@@ -36,7 +36,7 @@ for col in cursor.fetchall():
     print(col)
 
 # hacer la consulta
-cursor.execute("SELECT * FROM LogEntry LIMIT 20")
+cursor.execute("SELECT * FROM LogEntry")
 
 rows = cursor.fetchall()
 
