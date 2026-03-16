@@ -5,6 +5,7 @@ import os
 import matplotlib.pyplot as plt
 from sqlalchemy import create_engine
 import BaseDeDatos_Lib_v04 as BD
+import BaseDeDatos_IQ_v01 as IQ
 
 
 engine = create_engine('mysql+pymysql://root:@192.168.1.50:3306/dichot')
@@ -27,5 +28,5 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 
 # seleccionar la base
-df = BD.buscarEnBaseDeDatos(engine, Tabla_Data, inicio, fin)
+df = IQ.buscarEnBaseDeDatos(engine, Tabla_Data, inicio, fin)
 print(df)
