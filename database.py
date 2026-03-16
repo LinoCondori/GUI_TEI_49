@@ -7,12 +7,11 @@ from sqlalchemy import create_engine
 import BaseDeDatos_Lib_v04 as BD
 
 
-engine = create_engine('postgresql://postgres:vag@10.30.19.5:5432/GAWUSH_DATABASE')
-Tabla_Data = 'O3_SN_0330102717'
-Tabla_Coef = 'O3_SN_0330102717_Coeficientes'
-Tabla_Zero = 'O3_Calibraciones'
-inicio = pd.to_datetime('2025-01-01 00:00')
-fin = pd.to_datetime('2026-01-01 00:00')
+engine = create_engine('mysql+pymysql://root:@192.168.1.50:3306/dichot')
+Tabla_Data = 'LogEntry'
+
+inicio = pd.to_datetime('2026-03-01 00:00')
+fin = pd.to_datetime('2026-03-02 00:00')
 
 import pymysql
 
@@ -28,17 +27,5 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 
 # seleccionar la base
-cursor.execute("USE dichot")
-
-cursor.execute("DESCRIBE LogEntry")
-
-for col in cursor.fetchall():
-    print(col)
-
-# hacer la consulta
-cursor.execute("SELECT * FROM LogEntry")
-
-rows = cursor.fetchall()
-
-for row in rows:
-    print(row)
+df = BD.buscarEnBaseDeDatos(engine, Tabla_Data, inicio, fin)
+print(df)
