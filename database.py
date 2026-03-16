@@ -27,8 +27,13 @@ conn = pymysql.connect(
 
 cursor = conn.cursor()
 
+# seleccionar la base
 cursor.execute("USE dichot")
-cursor.execute("SHOW TABLES")
 
-for table in cursor.fetchall():
-    print(table)
+# hacer la consulta
+cursor.execute("SELECT * FROM logentry")
+
+rows = cursor.fetchall()
+
+for row in rows:
+    print(row)
