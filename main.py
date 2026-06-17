@@ -143,7 +143,7 @@ class App:
                 #else:
                 #    self.inst_frame[instrument.name]["label_value"].config(text=f'------')
                 if instrument.value  is not None:
-                    if instrument.communication.port.startswith("COM"):
+                    if str(instrument.communication.port).startswith("COM"):
                         pass
 
                     elif hasattr(instrument.communication, 'host'): #"." in instrument.communication.host:
