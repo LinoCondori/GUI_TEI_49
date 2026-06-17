@@ -7,9 +7,9 @@ from time import time
 
 #from __main__ import __file__ as nameMain
 
-def buscarEnBaseDeDatos(engine, Tabla, inicio, fin):
+def buscarEnBaseDeDatos(engine, tabla, inicio, fin):
     try:
-        consulta = "SELECT * FROM " + Tabla + " WHERE time_stamp >= '" + inicio._repr_base + "' AND time_stamp < '" + fin._repr_base + "' ORDER BY time_stamp"
+        consulta = "SELECT * FROM " + tabla + " WHERE time_stamp >= '" + inicio._repr_base + "' AND time_stamp < '" + fin._repr_base + "' ORDER BY time_stamp"
         print(consulta)
         df_aux = pd.read_sql_query(consulta, con=engine)
         df_aux['DateTime'] = pd.to_datetime(df_aux.time_stamp)

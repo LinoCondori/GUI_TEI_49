@@ -9,7 +9,9 @@ class TCPCommunication(BaseCommunication):
 
     def __init__(self, host, port, PS):
         self.host = host
-        self.port = port
+        self.port = 9881
+        self.port_modbus = 502
+        self.port_sql = 3306
         self.sock = None
         self.connected = False
         if PS == "PS":

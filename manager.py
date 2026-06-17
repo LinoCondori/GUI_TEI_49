@@ -15,7 +15,8 @@ class InstrumentManager:
             comm = SerialCommunication(port)
 
         elif "." in port:  # IP
-            host, tcp_port = port.split(":")
+            host = port.split(":")[0]
+            tcp_port = '9881'
             comm = TCPCommunication(host, tcp_port, instrument_id)
 
         else:
