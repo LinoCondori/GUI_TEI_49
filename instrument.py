@@ -80,7 +80,7 @@ class Instrument:
         #print(self.communication.port)
         ### GUARDAR
 
-        if self.communication.port.startswith("COM"):
+        if str(self.communication.port).startswith("COM"):
             with open(file_path, "a") as f:
                 if not file_exists:
                     f.write("FechaHora, trama de datos \n")
