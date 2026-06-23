@@ -33,6 +33,8 @@ class Instrument:
         self.thread = threading.Thread(target=self._loop, daemon=True)
         self.thread.start()
 
+        self.inst_recover_data("2026-06-22","2026-06-23")
+
     def stop(self):
         self.running = False
 
@@ -125,6 +127,10 @@ class Instrument:
         return pd.concat([df_Tmin.round(3),df_NO_min], axis=1)
 
 
+    def get_last_local_timestamp(self):
+        ...
 
+    def inst_recover_data(self, start, end):
+            self.communication.recover_data(start, end)
 
 

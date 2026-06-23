@@ -135,6 +135,7 @@ class App:
             instrument.start()
 
     def update_loop(self):
+        #una de las cosas que hace esta funcion es actualizar el ultimo valor leido de un instrumento
         for instrument in self.manager.get_instruments():
             #value = instrument.read_value()
             if instrument in self.inst_frame:
@@ -151,7 +152,7 @@ class App:
                             instrument.communication.header.split().index('Concentration_(ppb_or_ug/m3)')]}')
                     else:
                         self.inst_frame[instrument]["label_value"].config(text=f'{instrument.value.split(',')[0]}')
-        self.root.after(20000, self.update_loop)  # actualiza cada 2 segundos los instrumentos
+        self.root.after(20000, self.update_loop)  # actualiza cada 20 segundos los instrumentos
 
     def toggle_instrument(self, instrument, var):
         if var.get():
@@ -283,7 +284,7 @@ class App:
 
         self.canvas.draw()
 
-        self.root.after(20000, self.update_graph)  # cada 10 segundos
+        self.root.after(20000, self.update_graph)  # cada 20 segundos
 
 
     def update_minute_file(self):

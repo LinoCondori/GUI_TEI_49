@@ -24,7 +24,7 @@ class InstrumentManager:
             comm = SimulatedCommunication(name, port,)
             #return None
 
-        instrument = Instrument(name, comm)
+        #instrument = Instrument(name, comm)
         #self.instruments.append(instrument)
         #return instrument
         self.instruments[name] = Instrument(name, port, instrument_id, comm)
