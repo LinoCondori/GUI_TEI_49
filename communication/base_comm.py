@@ -1,5 +1,7 @@
 
 class BaseCommunication:
+    type = "base"
+
     def connect(self):
         pass
 
@@ -9,5 +11,5 @@ class BaseCommunication:
     def close(self):
         pass
 
-    def recover_data(self, start, end):
+    def recover_data(self, start, end, path):
         pass

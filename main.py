@@ -232,12 +232,15 @@ class App:
             self.create_instrument_ui(instrument, enabled=enabled)
 
 
-    def create_path_raw(self, fechaHora, instrument):
+    def create_path_raw(self, fechaHora, instrument, folder="crudo"):
         year = fechaHora.strftime("%Y")
         date_str = fechaHora.strftime("%Y-%m-%d")
-
-        base_path = os.path.join("data", instrument, "crudo", year)
+        if folder:
+            base_path = os.path.join("data", instrument, folder, year)
+        else:
+            base_path = os.path.join("data", instrument, year)
         return os.path.join(base_path, f"{date_str}.csv")
+
 
     def create_path_avg(self, fechaHora, instrument):
         year = fechaHora.strftime("%Y")
@@ -245,6 +248,30 @@ class App:
 
         base_path = os.path.join("data", instrument, year)
         return os.path.join(base_path, f"{date_str}.csv")
+
+    def load_files(self, name, folder):
+        now = datetime.now()
+        yesterday = now - timedelta(hours=24)
+
+        file_path_now = self.create_path_raw(now, name, folder)
+        file_path_yesterday = self.create_path_raw(yesterday, name, folder)
+        try:
+            df_now = pd.read_csv(file_path_now, parse_dates=["FechaHora"])
+        except:
+            df_now = pd.DataFrame()
+
+        try:
+            df_yesterday = pd.read_csv(file_path_yesterday, parse_dates=["FechaHora"])
+        except:
+            df_yesterday = pd.DataFrame()
+
+
+        df_full = pd.concat(
+            [df_yesterday, df_now,  ], axis=0)
+        df_full.rename(columns={'Concentration_(ppb_or_ug/m3)': 'O3'}, inplace=True)
+        df_full.rename(columns={'dato1': 'O3'}, inplace=True)
+
+        return df_full
 
     def update_graph(self):
         now = datetime.now()
@@ -255,19 +282,19 @@ class App:
         self.ax_24h.clear()
 
         for instrument in self.manager.get_instruments():
-            file_path_now = self.create_path_raw(now, instrument.name)
-            file_path_yesterday = self.create_path_raw(yesterday, instrument.name)
-            df_full = pd.concat([instrument.load_data_from_file(file_path_yesterday), instrument.load_data_from_file(file_path_now) , ], axis=0)
-            df_full.rename(columns={'Concentration_(ppb_or_ug/m3)': 'O3'}, inplace=True)
-            df_full.rename(columns={'dato1': 'O3'}, inplace=True)
+            df_full = self.load_files(instrument.name, "crudo")
+
+            df_full_avg = self.load_files(instrument.name, "")
+
+
             try:
                 filter_1H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(1, "hour")
                 df = df_full.loc[filter_1H]
                 if df is not None and not df.empty:
                     self.ax_hour.plot(df["FechaHora"], df["O3"], label=instrument.name)
 
-                filter_24H = df_full["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(24, "hour")
-                df = df_full.loc[filter_24H]
+                filter_24H = df_full_avg["FechaHora"] >= pd.to_datetime(now) - pd.to_timedelta(24, "hour")
+                df = df_full_avg.loc[filter_24H]
                 if df is not None and not df.empty:
                     self.ax_24h.plot(df["FechaHora"], df["O3"], label=instrument.name)
             except:
@@ -290,15 +317,17 @@ class App:
     def update_minute_file(self):
         now = datetime.now() - timedelta(minutes=5)
         for instrument in self.manager.get_instruments():
-            file_path_now = self.create_path_raw(now, instrument.name)
+            file_path_now = self.create_path_raw(now, instrument.name, "crudo")
             df_avg = instrument.minute_average(file_path_now)
             file_path_avg = self.create_path_avg(now, instrument.name)
             base_path = os.path.join(os.path.dirname(file_path_avg))
             os.makedirs(base_path, exist_ok=True)
             if df_avg.empty:
                 return
-            df_avg.to_csv(file_path_avg)
-        self.root.after(60000, self.update_minute_file)  # cada 10 segundos
+
+            instrument.update_avg_file(df_avg, file_path_avg)
+            #df_avg.to_csv(file_path_avg)
+        self.root.after(60000, self.update_minute_file)  # cada 60 segundos
 
 
 

@@ -36,6 +36,8 @@ FgErro = int('3000000', 16)
 
 class SerialCommunication(BaseCommunication):
 
+    type = "serial"
+
     def __init__(self, port, baudrate=9600):
         self.port = port
         self.baudrate = baudrate
@@ -51,3 +53,6 @@ class SerialCommunication(BaseCommunication):
     def close(self):
         if self.conn:
             self.conn.close()
+
+    def recover_data(self, start, end):
+        ...

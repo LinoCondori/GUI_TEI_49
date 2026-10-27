@@ -3,6 +3,7 @@ import time
 from .base_comm import BaseCommunication
 
 class SimulatedCommunication(BaseCommunication):
+    type = "simulated"
 
     def __init__(self, name="Sim", port="SIM",):
         self.name = name
@@ -29,3 +30,6 @@ class SimulatedCommunication(BaseCommunication):
     def close(self):
         self.running = False
         self.connected = False
+
+    def recover_data(self, start, end, path):
+        ...
