@@ -1,7 +1,7 @@
 # gui.py
 import tkinter as tk
 from tkinter import filedialog
-
+from tkinter import ttk
 import pandas as pd
 
 from manager import InstrumentManager
@@ -19,7 +19,8 @@ class App:
         self.root = root
         self.root.title("GUI TEI 49")
 
-        import tkinter as tk
+        #import tkinter as tk
+
 
         menubar = tk.Menu(self.root)
 
@@ -41,8 +42,26 @@ class App:
         top_frame.pack(side="top", anchor="nw", pady=10)
         new_inst_frame = tk.Frame(top_frame)
         new_inst_frame.pack(side=tk.LEFT, pady=10)
+
+        # Modelo de instrumento
+        self.combo_model = ttk.Combobox(
+            new_inst_frame,
+            values=["49C", "49iQ", "Simulado"],
+            state="readonly"
+        )
+        self.combo_model.pack()
+
+        #self.combo_model.set("Simulado")  # Selección inicial
+
+        self.combo_model.bind(
+            "<<ComboboxSelected>>",
+            self.on_model_selected
+        )
+
+        # el nombre deberia ser el numero de serie
         self.entry_name = tk.Entry(new_inst_frame)
         self.entry_name.pack()
+        # el puerto en el TEI49C es el puerto COM
         self.entry_port = tk.Entry(new_inst_frame)
         self.entry_port.pack()
         self.entry_instrument_id = tk.Entry(new_inst_frame)
@@ -95,6 +114,42 @@ class App:
             self.entry_name.delete(0, tk.END)
             self.entry_port.delete(0, tk.END)
             self.entry_instrument_id.delete(0, tk.END)
+
+    def on_model_selected(self, event=None):
+        model = self.combo_model.get()
+
+        defaults = {
+            "49C": {
+                "name": "TEI49",
+                "port": "COM3",
+                "instrument_id": "49"
+            },
+            "49iQ": {
+                "name": "TCP",
+                "port": "192.168.1.100:5000",
+                "instrument_id": "1"
+            },
+            "Simulado": {
+                "name": "Simulado",
+                "port": "SIM",
+                "instrument_id": "1"
+            }
+        }
+
+        values = defaults.get(model, {})
+
+        self.entry_name.delete(0, "end")
+        self.entry_name.insert(0, values.get("name", ""))
+
+        self.entry_port.delete(0, "end")
+        self.entry_port.insert(0, values.get("port", ""))
+
+        self.entry_instrument_id.delete(0, "end")
+        self.entry_instrument_id.insert(
+            0, values.get("instrument_id", "")
+        )
+
+
     def create_instrument_ui(self, instrument, enabled=True):
 
         frame = tk.Frame(self.instruments_frame)

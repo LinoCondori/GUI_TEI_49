@@ -54,17 +54,26 @@ class Instrument:
 
             data = self.communication.read()
 
+            if self.communication.type == 'tcp':
+                if data:
+                    if self.communication.header == data:
+                        print("se detecto encabezado")# self.read_value()
+                        continue
+                    self.value = data
+                    self.save_data(self.value)
+                else:
+                    print("Reconectando...")
+                    self.communication.close()
+                    time.sleep(5)
 
-            if data:
-                if self.communication.header == data:
-                    print("se detecto encabezado")# self.read_value()
-                    continue
-                self.value = data
-                self.save_data(self.value)
-            else:
-                print("Reconectando...")
-                self.communication.close()
-                time.sleep(5)
+            if self.communication.type == 'serial':
+                if data:
+                    self.value = data
+                    self.save_data(self.value)
+                else:
+                    print("Sin Datos...")
+                    #self.communication.close()
+                    #time.sleep(5)
 
 
     def read_value(self):

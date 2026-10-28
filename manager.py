@@ -12,7 +12,7 @@ class InstrumentManager:
 
 
         if port.startswith("COM"):
-            comm = SerialCommunication(port)
+            comm = SerialCommunication(port, instrument_id)
 
         elif "." in port:  # IP
             host = port.split(":")[0]
